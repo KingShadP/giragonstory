@@ -5,7 +5,7 @@ export function MockShopNotice() {
       aria-labelledby="mock-shop-notice-heading"
     >
       <div className="inner">
-        <h2 id="mock-shop-notice-heading">Welcome to Hydrogen!</h2>
+        <h2 id="mock-shop-notice-heading">Welcome to KINGSHADP!</h2>
         <p>
           You&rsquo;re seeing mocked products because no store is connected to
           this project yet.

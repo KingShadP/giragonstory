@@ -1,4 +1,4 @@
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 
 /**
  * @param {FooterProps}
@@ -10,12 +10,12 @@ export function Footer() {
         GIRAGON
       </Link>
       <nav className="footer-menu" aria-label="Footer navigation">
-        <Link prefetch="intent" to="/collections/tops">Tops</Link>
-        <Link prefetch="intent" to="/collections/bottoms">Bottoms</Link>
+        <Link prefetch="intent" to="/collections/Giragon">Giragon Collection</Link>
+        <Link prefetch="intent" to="/collections/KingShadP">KingShadP Collection</Link>
         <Link prefetch="intent" to="/collections/accessories">Accessories</Link>
-        <Link prefetch="intent" to="/vision">Vision</Link>
+        <Link prefetch="intent" to="/vision">KingShadP LLC</Link>
       </nav>
-      <p>Quality control. High-end atmosphere. Built for KINGSHADP.</p>
+      <p>KINGSHADP LLC.</p>
     </footer>
   );
 }
