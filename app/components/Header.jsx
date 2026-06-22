@@ -1,9 +1,9 @@
-import {Suspense} from 'react';
-import {Await, Link, NavLink, useAsyncValue} from 'react-router';
-import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
-import {useAside} from '~/components/Aside';
+import { Suspense } from 'react';
+import { Await, Link, NavLink, useAsyncValue } from 'react-router';
+import { useAnalytics, useOptimisticCart } from '@shopify/hydrogen';
+import { useAside } from '~/components/Aside';
 
-export function Header({cart}) {
+export function Header({ cart }) {
   return (
     <header className="site-header">
       <Link className="brand-mark" prefetch="intent" to="/">
@@ -34,8 +34,8 @@ export function Header({cart}) {
   );
 }
 
-export function HeaderMenu({viewport}) {
-  const {close} = useAside();
+export function HeaderMenu({ viewport }) {
+  const { close } = useAside();
   const className = `header-menu-${viewport}`;
 
   return (
@@ -57,7 +57,7 @@ export function HeaderMenu({viewport}) {
 }
 
 function HeaderMenuMobileToggle() {
-  const {open} = useAside();
+  const { open } = useAside();
   return (
     <button
       className="icon-button header-menu-mobile-toggle reset"
@@ -71,7 +71,7 @@ function HeaderMenuMobileToggle() {
 }
 
 function SearchToggle() {
-  const {open} = useAside();
+  const { open } = useAside();
   return (
     <button
       className="text-button reset"
@@ -83,9 +83,9 @@ function SearchToggle() {
   );
 }
 
-function CartBadge({count}) {
-  const {open} = useAside();
-  const {publish, shop, cart, prevCart} = useAnalytics();
+function CartBadge({ count }) {
+  const { open } = useAside();
+  const { publish, shop, cart, prevCart } = useAnalytics();
 
   return (
     <a
@@ -107,7 +107,7 @@ function CartBadge({count}) {
   );
 }
 
-function CartToggle({cart}) {
+function CartToggle({ cart }) {
   return (
     <Suspense fallback={<CartBadge count={0} />}>
       <Await resolve={cart}>
@@ -124,10 +124,10 @@ function CartBanner() {
 }
 
 const NAV_ITEMS = [
-  {label: 'Tops', to: '/collections/tops'},
-  {label: 'Bottoms', to: '/collections/bottoms'},
-  {label: 'Accessories', to: '/collections/accessories'},
-  {label: 'Vision', to: '/vision'},
+  { label: 'Giragon Collection', to: '/collections/Giragon' },
+  { label: 'KingShadP Collection', to: '/collections/KingShadP' },
+  { label: 'Accessories', to: '/collections/accessories' },
+  { label: 'KingShadP LLC', to: '/vision' },
 ];
 
 /** @typedef {'desktop' | 'mobile'} Viewport */
