@@ -21,20 +21,37 @@ async function loadCriticalData({context, params, request}) {
   const paginationVariables = getPaginationVariables(request, {pageBy: 8});
 
   if (!handle) {
-    throw redirect('/collections/tops');
+    throw redirect('/collections/giragon');
   }
 
-  const profile = CATEGORY_PROFILES[handle] || CATEGORY_PROFILES.default;
+  const normalizedHandle = handle.toLowerCase();
+  const legacyRedirect = LEGACY_COLLECTION_REDIRECTS[normalizedHandle];
+
+  if (legacyRedirect) {
+    throw redirect(`/collections/${legacyRedirect}`);
+  }
+
+  if (handle !== normalizedHandle && CATEGORY_PROFILES[normalizedHandle]) {
+    throw redirect(`/collections/${normalizedHandle}`);
+  }
+
+  const profile =
+    CATEGORY_PROFILES[normalizedHandle] || CATEGORY_PROFILES.default;
   const {collection} = await storefront.query(COLLECTION_QUERY, {
-    variables: {handle, ...paginationVariables},
+    variables: {handle: normalizedHandle, ...paginationVariables},
   });
 
   if (collection) {
-    redirectIfHandleIsLocalized(request, {handle, data: collection});
+    redirectIfHandleIsLocalized(request, {
+      handle: normalizedHandle,
+      data: collection,
+    });
   }
 
-  if (!collection && !CATEGORY_PROFILES[handle]) {
-    throw new Response(`Collection ${handle} not found`, {status: 404});
+  if (!collection && !CATEGORY_PROFILES[normalizedHandle]) {
+    throw new Response(`Collection ${normalizedHandle} not found`, {
+      status: 404,
+    });
   }
 
   const fallbackProducts = collection
@@ -45,8 +62,8 @@ async function loadCriticalData({context, params, request}) {
 
   return {
     collection: collection || {
-      id: `giragon-${handle}`,
-      handle,
+      id: `giragon-${normalizedHandle}`,
+      handle: normalizedHandle,
       title: profile.title,
       description: profile.description,
       products: fallbackProducts.products,
@@ -209,22 +226,22 @@ const FALLBACK_PRODUCTS_QUERY = `#graphql
 `;
 
 const CATEGORY_PROFILES = {
-  tops: {
-    title: 'Tops',
-    code: 'Platinum Atelier',
+  giragon: {
+    title: 'Giragon Collection',
+    code: 'Platinum Uniform Room',
     description:
-      'A clean atelier page for the primary pieces: tees, knits, hoodies, jackets, and sharp layers.',
+      'A clean product room for the core GIRAGON uniform: essentials, layers, and everyday pieces with controlled spacing.',
     layout: 'Centered platinum grid',
     theme: 'theme-atelier',
     gridClass: 'grid-atelier',
-    nextLabel: 'Next category: Bottoms',
-    nextUrl: '/collections/bottoms',
+    nextLabel: 'Next room: KingShadP Collection',
+    nextUrl: '/collections/kingshadp',
   },
-  bottoms: {
-    title: 'Bottoms',
-    code: 'Precision Retail',
+  kingshadp: {
+    title: 'KingShadP Collection',
+    code: 'Signature House Room',
     description:
-      'A tighter retail layout for comparing pants, cargos, denim, shorts, and proportions fast.',
+      'A sharper house edit for statement pieces, darker contrast, and the KINGSHADP standard.',
     layout: 'Precision filter rhythm',
     theme: 'theme-precision',
     gridClass: 'grid-precision',
@@ -250,9 +267,14 @@ const CATEGORY_PROFILES = {
     layout: 'Premium product grid',
     theme: 'theme-atelier',
     gridClass: 'grid-atelier',
-    nextLabel: 'Return to Tops',
-    nextUrl: '/collections/tops',
+    nextLabel: 'Return to Giragon Collection',
+    nextUrl: '/collections/giragon',
   },
+};
+
+const LEGACY_COLLECTION_REDIRECTS = {
+  tops: 'giragon',
+  bottoms: 'kingshadp',
 };
 
 /** @typedef {import('./+types/collections.$handle').Route} Route */

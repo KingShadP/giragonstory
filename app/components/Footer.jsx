@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import {Link} from 'react-router';
 
 /**
  * @param {FooterProps}
@@ -6,16 +6,33 @@ import { Link } from 'react-router';
 export function Footer() {
   return (
     <footer className="footer">
-      <Link className="footer-brand" prefetch="intent" to="/">
-        GIRAGON
-      </Link>
+      <div className="footer-signature">
+        <Link className="footer-brand" prefetch="intent" to="/">
+          GIRAGON
+        </Link>
+        <p>Premium uniform rooms by KINGSHADP LLC.</p>
+      </div>
       <nav className="footer-menu" aria-label="Footer navigation">
-        <Link prefetch="intent" to="/collections/Giragon">Giragon Collection</Link>
-        <Link prefetch="intent" to="/collections/KingShadP">KingShadP Collection</Link>
-        <Link prefetch="intent" to="/collections/accessories">Accessories</Link>
-        <Link prefetch="intent" to="/vision">KingShadP LLC</Link>
+        <div>
+          <span>Collections</span>
+          <Link prefetch="intent" to="/collections/giragon">
+            Giragon Collection
+          </Link>
+          <Link prefetch="intent" to="/collections/kingshadp">
+            KingShadP Collection
+          </Link>
+        </div>
+        <div>
+          <span>House</span>
+          <Link prefetch="intent" to="/collections/accessories">
+            Accessories
+          </Link>
+          <Link prefetch="intent" to="/vision">
+            KingShadP LLC
+          </Link>
+        </div>
       </nav>
-      <p>KINGSHADP LLC.</p>
+      <p className="footer-mark">KINGSHADP</p>
     </footer>
   );
 }

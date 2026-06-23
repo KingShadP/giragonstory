@@ -44,8 +44,8 @@ export default function Vision() {
       </section>
       <section className="vision-cta">
         <span>Return to the first product room</span>
-        <Link prefetch="intent" to="/collections/tops">
-          Shop Tops
+        <Link prefetch="intent" to="/collections/giragon">
+          Giragon Collection
         </Link>
       </section>
     </div>
