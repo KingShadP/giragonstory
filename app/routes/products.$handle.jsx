@@ -11,6 +11,7 @@ import {ProductPrice} from '~/components/ProductPrice';
 import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
+import {WishlistButton} from '~/components/WishlistButton';
 
 /**
  * @type {Route.MetaFunction}
@@ -119,6 +120,11 @@ export default function Product() {
           productOptions={productOptions}
           selectedVariant={selectedVariant}
         />
+        <WishlistButton
+          className="wishlist-button-product"
+          product={product}
+          selectedVariant={selectedVariant}
+        />
         <br />
         <br />
         <p>
@@ -190,6 +196,19 @@ const PRODUCT_FRAGMENT = `#graphql
     title
     vendor
     handle
+    featuredImage {
+      id
+      altText
+      url
+      width
+      height
+    }
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
     descriptionHtml
     description
     encodedVariantExistence

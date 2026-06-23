@@ -1,6 +1,7 @@
 import {Link} from 'react-router';
 import {Image, Money} from '@shopify/hydrogen';
 import {useVariantUrl} from '~/lib/variants';
+import {WishlistButton} from '~/components/WishlistButton';
 
 /**
  * @param {{
@@ -18,39 +19,37 @@ export function ProductItem({product, loading}) {
     (candidate) => candidate?.url && candidate.url !== image?.url,
   );
   return (
-    <Link
-      className="product-item"
-      key={product.id}
-      prefetch="intent"
-      to={variantUrl}
-    >
-      <span className="product-media">
-        {image && (
-          <Image
-            alt={image.altText || product.title}
-            aspectRatio="1/1"
-            className="product-image-primary"
-            data={image}
-            loading={loading}
-            sizes="(min-width: 45em) 400px, 100vw"
-          />
-        )}
-        {hoverImage && (
-          <Image
-            alt={hoverImage.altText || product.title}
-            aspectRatio="1/1"
-            className="product-image-hover"
-            data={hoverImage}
-            loading="lazy"
-            sizes="(min-width: 45em) 400px, 100vw"
-          />
-        )}
-      </span>
-      <h4>{product.title}</h4>
-      <small>
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
-    </Link>
+    <article className="product-item" key={product.id}>
+      <Link className="product-item-link" prefetch="intent" to={variantUrl}>
+        <span className="product-media">
+          {image && (
+            <Image
+              alt={image.altText || product.title}
+              aspectRatio="1/1"
+              className="product-image-primary"
+              data={image}
+              loading={loading}
+              sizes="(min-width: 45em) 400px, 100vw"
+            />
+          )}
+          {hoverImage && (
+            <Image
+              alt={hoverImage.altText || product.title}
+              aspectRatio="1/1"
+              className="product-image-hover"
+              data={hoverImage}
+              loading="lazy"
+              sizes="(min-width: 45em) 400px, 100vw"
+            />
+          )}
+        </span>
+        <h4>{product.title}</h4>
+        <small>
+          <Money data={product.priceRange.minVariantPrice} />
+        </small>
+      </Link>
+      <WishlistButton className="wishlist-button-card" product={product} />
+    </article>
   );
 }
 

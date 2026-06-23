@@ -5,6 +5,7 @@ import {
   Outlet,
   useLoaderData,
 } from 'react-router';
+import {AccountWishlist} from '~/components/AccountWishlist';
 import {CUSTOMER_DETAILS_QUERY} from '~/graphql/customer-account/CustomerDetailsQuery';
 
 export function shouldRevalidate() {
@@ -53,6 +54,9 @@ export default function AccountLayout() {
       <AccountMenu />
       <br />
       <br />
+      <AccountWishlist />
+      <br />
+      <br />
       <Outlet context={{customer}} />
     </div>
   );
@@ -79,6 +83,8 @@ function AccountMenu() {
       <NavLink to="/account/addresses" style={isActiveStyle}>
         &nbsp; Addresses &nbsp;
       </NavLink>
+      &nbsp;|&nbsp;
+      <a href="#account-wishlist">&nbsp; Wishlist &nbsp;</a>
       &nbsp;|&nbsp;
       <Logout />
     </nav>
