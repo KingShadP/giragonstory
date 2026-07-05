@@ -31,6 +31,7 @@ export default [
       '**/*.graphql.ts',
       '**/*.generated.d.ts',
       '**/.react-router/',
+      'giragon-store/',
       '**/packages/hydrogen/dist/',
     ],
   },

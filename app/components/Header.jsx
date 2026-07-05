@@ -126,7 +126,6 @@ function CartBanner() {
 const NAV_ITEMS = [
   {label: 'Giragon Collection', to: '/collections/giragon'},
   {label: 'KingShadP Collection', to: '/collections/kingshadp'},
-  {label: 'Accessories', to: '/collections/accessories'},
   {label: 'KingShadP LLC', to: '/vision'},
 ];
 

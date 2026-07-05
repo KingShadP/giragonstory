@@ -24,9 +24,6 @@ export function Footer() {
         </div>
         <div>
           <span>House</span>
-          <Link prefetch="intent" to="/collections/accessories">
-            Accessories
-          </Link>
           <Link prefetch="intent" to="/vision">
             KingShadP LLC
           </Link>

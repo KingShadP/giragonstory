@@ -1,5 +1,5 @@
 import {Link, useLoaderData} from 'react-router';
-import {Image, Money} from '@shopify/hydrogen';
+import {Image} from '@shopify/hydrogen';
 import {useVariantUrl} from '~/lib/variants';
 
 export const meta = () => {
@@ -14,13 +14,16 @@ export async function loader({context}) {
 export default function Homepage() {
   const {products} = useLoaderData();
   const featuredProducts = products?.nodes ?? [];
+  const leadProduct = featuredProducts[0];
+  const crownProducts = featuredProducts.slice(1, 4);
+  const spotlightProduct = featuredProducts[3] || leadProduct;
 
   return (
-    <div className="home giragon-page theme-home theme-remaster">
-      <section className="home-hero home-hero-editorial">
+    <div className="home giragon-page theme-home theme-shopify-copy">
+      <section className="shopify-split-slideshow" aria-label="Split slideshow">
         <video
           aria-hidden="true"
-          className="hero-loop-video"
+          className="shopify-split-slideshow__video"
           autoPlay
           loop
           muted
@@ -29,229 +32,331 @@ export default function Homepage() {
         >
           <source src="/media/giragon-loop-background.mp4" type="video/mp4" />
         </video>
-        <div className="home-hero-copy">
-          <h1>Not a menu. A product atmosphere.</h1>
+        <SplitSlide
+          align="right"
+          eyebrow="You made it! Royalty has arrived!"
+          heading="[Crown Heavy. Vibes Heavier.]"
+          copy="CONFIDENCE: Wearing KINGSHADP means carrying yourself with undeniable authority. ELEGANCE WITH EDGE: Clean, minimal design fused with street-born boldness. EXCLUSIVITY: Every drop is limited, crafted to be rare and unforgettable."
+          cta="Shop the Drop"
+          to={leadProduct ? `/products/${leadProduct.handle}` : '/collections/giragon'}
+          product={leadProduct}
+        />
+        <SplitSlide
+          align="left"
+          eyebrow="FEEL GOD. LOOK LIKE A GOD. BECOME GOD."
+          heading="[This is KINGSHADP]"
+          copy="We design clean, weighty pieces that read from across the room and hold up in the wash. GIRAGON carries the uniform while KINGSHADP sharpens the signature."
+          cta="Shop now"
+          to="/collections/giragon"
+          product={featuredProducts[1] || leadProduct}
+          dark
+        />
+      </section>
+
+      <FeaturedRail
+        eyebrow="Featured collection"
+        heading="[The Luxuries of KingShadP]"
+        copy="Better and Bold."
+        cta="Buy"
+        to="/collections/giragon"
+        products={featuredProducts}
+      />
+
+      <section
+        className="shopify-animated-slideshow"
+        aria-label="Animated slideshow"
+      >
+        <VisualPanel product={featuredProducts[2] || leadProduct} />
+        <div className="shopify-animated-slideshow__copy">
+          <span>originality is the new royalty.</span>
+          <h2>The Look, The Statement, The Legacy</h2>
           <p>
-            GIRAGON carries the uniform. KINGSHADP sharpens the signature. The
-            store opens as a controlled fashion room with product, texture, and
-            intent in the first frame.
+            Because clothes are not just clothes. They are a language. KingShadP
+            is fluent in confidence, and Giragon gives that confidence a uniform
+            room to live in.
           </p>
-          <div className="home-actions" aria-label="Primary collection links">
-            <Link prefetch="intent" to="/collections/giragon">
-              Enter Giragon
-            </Link>
-            <Link prefetch="intent" to="/collections/kingshadp">
-              Enter KingShadP
-            </Link>
-          </div>
-        </div>
-        <div className="home-product-stage">
-          <div className="stage-frame stage-frame-primary">
-            {featuredProducts[0]?.featuredImage ? (
-              <Image
-                alt={
-                  featuredProducts[0].featuredImage.altText ||
-                  featuredProducts[0].title
-                }
-                data={featuredProducts[0].featuredImage}
-                loading="eager"
-                sizes="(min-width: 900px) 520px, 80vw"
-              />
-            ) : null}
-            <span>The Uniform Room</span>
-          </div>
-          <div className="stage-frame stage-frame-secondary">
-            {featuredProducts[1]?.featuredImage ? (
-              <Image
-                alt={
-                  featuredProducts[1].featuredImage.altText ||
-                  featuredProducts[1].title
-                }
-                data={featuredProducts[1].featuredImage}
-                loading="eager"
-                sizes="(min-width: 900px) 340px, 56vw"
-              />
-            ) : null}
-            <span>The Signature Room</span>
-          </div>
-          <div className="stage-index">01 / 02</div>
-        </div>
-      </section>
-
-      <section className="room-index" aria-label="Room Index">
-        <p>Room Index</p>
-        {ROOMS.map((room) => (
-          <Link key={room.to} prefetch="intent" to={room.to}>
-            <span>{room.code}</span>
-            <strong>{room.title}</strong>
-            <small>{room.copy}</small>
+          <Link prefetch="intent" to="/collections/giragon">
+            Shop now
           </Link>
-        ))}
+        </div>
+        <VisualPanel product={featuredProducts[3] || leadProduct} dark />
       </section>
 
-      <section className="product-wall" aria-label="Latest Product Edit">
-        <div>
-          <p>Latest Product Edit</p>
-          <h2>Product wall, not product grid.</h2>
-          <small>
-            A tighter shop-floor rhythm with larger lead pieces, compressed
-            detail tiles, and direct routes into each garment.
-          </small>
+      <FeaturedRail
+        compact
+        eyebrow="Featured collection"
+        heading="Choose Your Crown"
+        copy="Wear Something That’s Rare."
+        cta="Cap Here"
+        to="/collections/giragon"
+        products={crownProducts.length ? crownProducts : featuredProducts}
+      />
+
+      <section className="shopify-featured-product" aria-label="Featured product">
+        <div className="shopify-featured-product__media">
+          {spotlightProduct?.featuredImage ? (
+            <Image
+              alt={spotlightProduct.featuredImage.altText || spotlightProduct.title}
+              data={spotlightProduct.featuredImage}
+              loading="lazy"
+              sizes="(min-width: 900px) 48vw, 90vw"
+            />
+          ) : null}
         </div>
-        <div className="product-wall-grid">
-          {featuredProducts.slice(0, 6).map((product, index) => (
-            <HomeProductTile
+        <div className="shopify-featured-product__content">
+          <span>Featured product</span>
+          <h2>REGAL. IRRESISTIBLE. CONFIDENTLY</h2>
+          {spotlightProduct ? (
+            <>
+              <h3>{spotlightProduct.title}</h3>
+              <p>{formatProductPrice(spotlightProduct)}</p>
+              <Link prefetch="intent" to={`/products/${spotlightProduct.handle}`}>
+                View product
+              </Link>
+            </>
+          ) : null}
+        </div>
+        <div className="shopify-featured-product__highlights">
+          {featuredProducts.slice(0, 3).map((product) => (
+            <ProductMini key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      <MediaGrid
+        eyebrow="Media grid"
+        heading="Fashion x Music"
+        copy="Because clothes are not just clothes. They are a language. Giragon keeps the product in frame and the energy controlled."
+        product={featuredProducts[4] || leadProduct}
+      />
+
+      <section className="shopify-collection-table" aria-label="Collection table">
+        <div>
+          <span>Collection table</span>
+          <h2>KingShadP x Adidas</h2>
+          <p>Adidas with a KingShadP flare.</p>
+        </div>
+        <div className="shopify-collection-table__rows">
+          {featuredProducts.slice(0, 5).map((product, index) => (
+            <CollectionTableRow
               key={product.id}
               product={product}
               index={index}
-              variant={index === 0 ? 'lead' : index === 3 ? 'wide' : 'standard'}
             />
           ))}
         </div>
       </section>
 
-      <section className="collection-runway" aria-label="Collection runway">
-        <RunwayPanel
-          title="Giragon Collection"
-          label="THE UNIFORM ROOM"
-          copy="Clean essentials, platinum surfaces, and everyday silhouettes with luxury spacing."
-          to="/collections/giragon"
-          product={featuredProducts[2] || featuredProducts[0]}
-        />
-        <RunwayPanel
-          title="KingShadP Collection"
-          label="THE SIGNATURE ROOM"
-          copy="Darker contrast, sharper presence, and the house mark pushed to the front."
-          to="/collections/kingshadp"
-          product={featuredProducts[3] || featuredProducts[1]}
-          dark
-        />
-      </section>
+      <Marquee lines={['KINGSHADP', 'REGAL. RARE. ROYALTY']} />
 
-      <section
-        className="material-story"
-        aria-label="Material presence purpose"
-      >
-        <div>
-          <h2>Material / Presence / Purpose</h2>
-          <p>
-            The structure should feel like a retail installation: rooms first,
-            product second, detail always close enough to inspect.
-          </p>
+      <section className="shopify-collection-tabs" aria-label="Collection tabs">
+        <div className="shopify-collection-tabs__tabs">
+          <span>KingShadP Royal Giraffagon Mascot</span>
+          <span>KingShadP Brand Logo</span>
+          <span>KingShadP feat Adidas</span>
         </div>
-        <div className="material-story-list">
-          {STORE_STANDARDS.map((standard) => (
-            <article key={standard.code}>
-              <span>{standard.code}</span>
-              <p>{standard.copy}</p>
-            </article>
+        <div className="shopify-collection-tabs__grid">
+          {featuredProducts.slice(0, 4).map((product) => (
+            <HomeProductTile key={product.id} product={product} />
           ))}
         </div>
       </section>
+
+      <MediaGrid
+        large
+        eyebrow="Champions Becomes Luxury."
+        heading="KingShadP x Champion"
+        copy="KingShadP is not a brand. It is a force. Each piece is a symbol of energy, elegance, and exclusivity."
+        product={featuredProducts[5] || leadProduct}
+      />
+
+      <Marquee quiet lines={['EFFORTLESSLY PERFECT']} />
     </div>
   );
 }
 
-function HomeProductTile({product, index, variant = 'standard'}) {
+function SplitSlide({align, eyebrow, heading, copy, cta, to, product, dark}) {
+  return (
+    <article
+      className={`shopify-split-slide shopify-split-slide--${align}${
+        dark ? ' shopify-split-slide--dark' : ''
+      }`}
+    >
+      <div className="shopify-split-slide__image">
+        {product?.featuredImage ? (
+          <Image
+            alt={product.featuredImage.altText || product.title}
+            data={product.featuredImage}
+            loading="eager"
+            sizes="(min-width: 900px) 50vw, 100vw"
+          />
+        ) : null}
+      </div>
+      <div className="shopify-split-slide__copy">
+        <span>{eyebrow}</span>
+        <h1>{heading}</h1>
+        <p>{copy}</p>
+        <Link prefetch="intent" to={to}>
+          {cta}
+        </Link>
+      </div>
+    </article>
+  );
+}
+
+function FeaturedRail({eyebrow, heading, copy, cta, to, products, compact}) {
+  return (
+    <section
+      className={`shopify-featured-rail${
+        compact ? ' shopify-featured-rail--compact' : ''
+      }`}
+      aria-label={heading}
+    >
+      <div className="shopify-section-heading">
+        <span>{eyebrow}</span>
+        <h2>{heading}</h2>
+        <p>{copy}</p>
+        <Link prefetch="intent" to={to}>
+          {cta}
+        </Link>
+      </div>
+      <div className="shopify-featured-rail__products">
+        {products.slice(0, compact ? 3 : 8).map((product) => (
+          <HomeProductTile key={product.id} product={product} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function VisualPanel({product, dark}) {
+  return (
+    <div className={`shopify-visual-panel${dark ? ' shopify-visual-panel--dark' : ''}`}>
+      {product?.featuredImage ? (
+        <Image
+          alt={product.featuredImage.altText || product.title}
+          data={product.featuredImage}
+          loading="lazy"
+          sizes="(min-width: 900px) 30vw, 90vw"
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function MediaGrid({eyebrow, heading, copy, product, large}) {
+  return (
+    <section
+      className={`shopify-media-grid${large ? ' shopify-media-grid--large' : ''}`}
+      aria-label={heading}
+    >
+      <div className="shopify-media-grid__visual">
+        {product?.featuredImage ? (
+          <Image
+            alt={product.featuredImage.altText || product.title}
+            data={product.featuredImage}
+            loading="lazy"
+            sizes="(min-width: 900px) 66vw, 100vw"
+          />
+        ) : (
+          <video autoPlay loop muted playsInline preload="metadata">
+            <source src="/media/giragon-loop-background.mp4" type="video/mp4" />
+          </video>
+        )}
+      </div>
+      <div className="shopify-media-grid__copy">
+        <span>{eyebrow}</span>
+        <h2>{heading}</h2>
+        <p>{copy}</p>
+      </div>
+    </section>
+  );
+}
+
+function Marquee({lines, quiet}) {
+  return (
+    <section
+      className={`shopify-marquee${quiet ? ' shopify-marquee--quiet' : ''}`}
+      aria-label="Marquee text"
+    >
+      {lines.map((line) => (
+        <div key={line}>
+          <span>{line}</span>
+          <span>{line}</span>
+          <span>{line}</span>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function HomeProductTile({product}) {
   const productUrl = useVariantUrl(product.handle);
 
   return (
-    <Link
-      className={`home-product-tile home-product-tile-${index + 1} tile-${variant}`}
-      prefetch="intent"
-      to={productUrl}
-    >
+    <Link className="home-product-tile" prefetch="intent" to={productUrl}>
       <span className="home-product-tile-media">
         {product.featuredImage ? (
           <Image
             alt={product.featuredImage.altText || product.title}
             data={product.featuredImage}
-            loading={index < 2 ? 'eager' : 'lazy'}
+            loading="lazy"
             sizes="(min-width: 900px) 280px, 70vw"
           />
         ) : null}
       </span>
       <span className="home-product-tile-meta">
         <strong>{product.title}</strong>
-        <small>
-          <Money data={product.priceRange.minVariantPrice} />
-        </small>
+        <small>{formatProductPrice(product)}</small>
       </span>
     </Link>
   );
 }
 
-function RunwayPanel({title, label, copy, to, product, dark = false}) {
+function ProductMini({product}) {
   return (
-    <Link
-      className={`runway-panel${dark ? ' runway-panel-dark' : ''}`}
-      prefetch="intent"
-      to={to}
-    >
-      <span>{label}</span>
-      <h2>{title}</h2>
-      <p>{copy}</p>
-      {product?.featuredImage ? (
+    <Link className="shopify-product-mini" prefetch="intent" to={useVariantUrl(product.handle)}>
+      {product.featuredImage ? (
         <Image
           alt={product.featuredImage.altText || product.title}
           data={product.featuredImage}
           loading="lazy"
-          sizes="(min-width: 900px) 44vw, 90vw"
+          sizes="160px"
         />
       ) : null}
-      <strong>Enter room</strong>
+      <span>{product.title}</span>
     </Link>
   );
 }
 
-const ROOMS = [
-  {
-    code: '01',
-    title: 'Giragon Collection',
-    copy: 'Clean uniform essentials',
-    to: '/collections/giragon',
-  },
-  {
-    code: '02',
-    title: 'KingShadP Collection',
-    copy: 'Signature house pieces',
-    to: '/collections/kingshadp',
-  },
-  {
-    code: '03',
-    title: 'Accessories',
-    copy: 'Finishing objects',
-    to: '/collections/accessories',
-  },
-  {
-    code: '04',
-    title: 'KingShadP LLC',
-    copy: 'Creative standard',
-    to: '/vision',
-  },
-];
+function CollectionTableRow({product, index}) {
+  const productUrl = useVariantUrl(product.handle);
 
-const STORE_STANDARDS = [
-  {
-    code: '01',
-    copy: 'Collection-first navigation, no generic clothing buckets.',
-  },
-  {
-    code: '02',
-    copy: 'Editorial scale, product depth, and premium contrast across the shop.',
-  },
-  {
-    code: '03',
-    copy: 'Mobile keeps the luxury rhythm without clipped type or overflow.',
-  },
-];
+  return (
+    <Link className="shopify-collection-row" prefetch="intent" to={productUrl}>
+      <span>{String(index + 1).padStart(2, '0')}</span>
+      <strong>{product.title}</strong>
+      <small>{formatProductPrice(product)}</small>
+    </Link>
+  );
+}
+
+function formatProductPrice(product) {
+  const price = product?.priceRange?.minVariantPrice;
+  if (!price) return '';
+
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: price.currencyCode,
+  }).format(Number(price.amount));
+}
 
 const HOMEPAGE_PRODUCTS_QUERY = `#graphql
   query HomepageProducts(
     $country: CountryCode
     $language: LanguageCode
   ) @inContext(country: $country, language: $language) {
-    products(first: 8, sortKey: UPDATED_AT, reverse: true) {
+    products(first: 12, sortKey: UPDATED_AT, reverse: true) {
       nodes {
         id
         handle

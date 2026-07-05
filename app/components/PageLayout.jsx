@@ -17,6 +17,7 @@ export function PageLayout({cart, children = null}) {
   return (
     <Aside.Provider>
       <InteractiveBackdrop />
+      <GiragonAtmosphere />
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside />
@@ -24,6 +25,24 @@ export function PageLayout({cart, children = null}) {
       <main>{children}</main>
       <Footer />
     </Aside.Provider>
+  );
+}
+
+function GiragonAtmosphere() {
+  return (
+    <div className="giragon-atmosphere" aria-hidden="true">
+      <div className="giragon-atmosphere-grid" />
+      <div className="giragon-atmosphere-sheen" />
+      <div className="giragon-atmosphere-rail">
+        <span>GIRAGON</span>
+        <strong>Uniform room active</strong>
+      </div>
+      <div className="giragon-atmosphere-coordinates">
+        <span>Material</span>
+        <span>Presence</span>
+        <span>Purpose</span>
+      </div>
+    </div>
   );
 }
 
